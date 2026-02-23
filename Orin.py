@@ -1,3 +1,4 @@
+import os
 import random
 import discord
 from discord.ext import commands
@@ -26,7 +27,7 @@ QUOTES = [
     "Do not live bowing down. You must die standing up"
 ]
 
-# user_id : date_string (UTC)
+# user_id : date (UTC)
 daily_usage = {}
 
 @bot.event
@@ -50,10 +51,7 @@ async def quote(interaction: discord.Interaction):
     now_utc = datetime.now(timezone.utc)
     today = now_utc.date()
 
-    last_used = daily_usage.get(user_id)
-
-    if last_used == today:
-        # Υπολογισμός χρόνου μέχρι 00:00 UTC
+    if daily_usage.get(user_id) == today:
         next_reset = datetime.combine(
             today + timedelta(days=1),
             datetime.min.time(),
@@ -71,10 +69,10 @@ async def quote(interaction: discord.Interaction):
         )
         return
 
-    # Επιτρέπεται
     daily_usage[user_id] = today
     await interaction.response.send_message(
         random.choice(QUOTES),
         ephemeral=True
     )
-bot.run("YOUR PERSONAL TOKEN")
+
+bot.run('Your token')
