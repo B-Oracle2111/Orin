@@ -4,9 +4,11 @@ import discord
 from discord.ext import commands
 from datetime import datetime, timezone, timedelta
 
+intents = discord.Intents.default()
+
 bot = commands.Bot(
     command_prefix=">",
-    intents=discord.Intents.default()
+    intents=intents
 )
 
 QUOTES = [
@@ -75,4 +77,5 @@ async def quote(interaction: discord.Interaction):
         ephemeral=True
     )
 
-bot.run('Your token')
+# 🔐 Token από Railway Variables
+bot.run(os.environ["DISCORD_TOKEN"])
