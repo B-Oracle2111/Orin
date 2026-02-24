@@ -4,9 +4,11 @@ import discord
 from discord.ext import commands
 from datetime import datetime, timezone, timedelta
 
+intents = discord.Intents.default()
+
 bot = commands.Bot(
     command_prefix=">",
-    intents=discord.Intents.default()
+    intents=intents
 )
 
 QUOTES = [
@@ -27,7 +29,7 @@ QUOTES = [
     "Do not live bowing down. You must die standing up"
 ]
 
-# user_id -> date (UTC)
+# user_id : date (UTC)
 daily_usage = {}
 
 @bot.event
@@ -51,6 +53,7 @@ async def quote(interaction: discord.Interaction):
     now_utc = datetime.now(timezone.utc)
     today = now_utc.date()
 
+    # ── daily limit check ──
     if daily_usage.get(user_id) == today:
         next_reset = datetime.combine(
             today + timedelta(days=1),
@@ -58,6 +61,7 @@ async def quote(interaction: discord.Interaction):
             tzinfo=timezone.utc
         )
         remaining = next_reset - now_utc
+
         hours = remaining.seconds // 3600
         minutes = (remaining.seconds % 3600) // 60
 
@@ -68,11 +72,13 @@ async def quote(interaction: discord.Interaction):
         )
         return
 
+    # ── give quote ──
     daily_usage[user_id] = today
+
     await interaction.response.send_message(
         random.choice(QUOTES),
         ephemeral=True
     )
 
-
+# ── run bot ──
 bot.run(os.getenv("DISCORD_TOKEN"))
