@@ -74,5 +74,5 @@ async def quote(interaction: discord.Interaction):
         ephemeral=True
     )
 
-# ⬇️ token ΜΟΝΟ από Railway Variables
+
 bot.run(os.getenv("DISCORD_TOKEN"))
