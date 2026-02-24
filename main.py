@@ -4,11 +4,9 @@ import discord
 from discord.ext import commands
 from datetime import datetime, timezone, timedelta
 
-intents = discord.Intents.default()
-
 bot = commands.Bot(
     command_prefix=">",
-    intents=intents
+    intents=discord.Intents.default()
 )
 
 QUOTES = [
@@ -29,7 +27,7 @@ QUOTES = [
     "Do not live bowing down. You must die standing up"
 ]
 
-# user_id : date (UTC)
+# user_id -> date (UTC)
 daily_usage = {}
 
 @bot.event
@@ -60,7 +58,6 @@ async def quote(interaction: discord.Interaction):
             tzinfo=timezone.utc
         )
         remaining = next_reset - now_utc
-
         hours = remaining.seconds // 3600
         minutes = (remaining.seconds % 3600) // 60
 
@@ -77,4 +74,5 @@ async def quote(interaction: discord.Interaction):
         ephemeral=True
     )
 
-bot.run(os.environ["DISCORD_TOKEN"])
+# ⬇️ token ΜΟΝΟ από Railway Variables
+bot.run(os.getenv("DISCORD_TOKEN"))
