@@ -77,5 +77,4 @@ async def quote(interaction: discord.Interaction):
         ephemeral=True
     )
 
-# 🔐 Token από Railway Variables
 bot.run(os.environ["DISCORD_TOKEN"])
